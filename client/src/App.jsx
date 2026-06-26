@@ -1,18 +1,33 @@
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/NotFound";
-import { Route, Switch } from "wouter";
+import { Route, Switch, Router as WouterRouter } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import AnimatedBackground from "./components/AnimatedBackground";
+
+const getBase = () => {
+  if (window.location.hostname.endsWith(".github.io")) {
+    const paths = window.location.pathname.split('/');
+    if (paths[1]) {
+      return `/${paths[1]}`;
+    }
+  }
+  return "";
+};
+
 function Router() {
-    return (<Switch>
-      <Route path={"/"} component={Home}/>
-      <Route path={"/404"} component={NotFound}/>
-      {/* Final fallback route */}
-      <Route component={NotFound}/>
-    </Switch>);
+    return (
+      <WouterRouter base={getBase()}>
+        <Switch>
+          <Route path={"/"} component={Home}/>
+          <Route path={"/404"} component={NotFound}/>
+          {/* Final fallback route */}
+          <Route component={NotFound}/>
+        </Switch>
+      </WouterRouter>
+    );
 }
 // NOTE: About Theme
 // - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
